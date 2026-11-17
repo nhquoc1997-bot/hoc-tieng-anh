@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#204b3c"><meta name="bob-build" content="UI-PROMAX-20261109-FIX7-TEACHER"><title>Bob English — Lớp học của bạn</title><meta name="description" content="Lộ trình học tiếng Anh 14 tuần, tài khoản riêng và bài học có hướng dẫn.">
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#204b3c"><meta name="bob-build" content="UI-PROMAX-20261117-FIX8-PLAY"><title>Bob English — Lớp học của bạn</title><meta name="description" content="Lộ trình học tiếng Anh 14 tuần, tài khoản riêng và bài học có hướng dẫn.">
 <!-- CHỈ CẦN THAY URL BÊN DƯỚI SAU KHI TRIỂN KHAI MÁY CHỦ. KHÔNG ĐIỀN MẬT KHẨU VÀO MÃ NÀY. -->
 <script>// Điền URL Worker của bạn sau khi triển khai server-private.
 // Sau khi sửa nguồn này: node scripts/build-index.mjs
@@ -291,6 +291,144 @@ body.sheet-open{overflow:hidden}
 .td-detail{margin-top:12px}.td-table{font-size:12.5px}.td-table th,.td-table td{padding:6px 5px;text-align:center}.td-table td.full{color:#2f6b1f;font-weight:700}.td-table td.part{color:#8a5a00;font-weight:650}.td-table td.none{color:#b8bfb3}
 .td-admin{display:grid;gap:8px;margin-top:10px}.td-reset{display:grid;grid-template-columns:1fr auto;gap:8px}.td-reset input{min-height:44px;font-size:15px}.td-admin .btn{margin:0;min-height:44px}
 @media(max-width:650px){.td-stats{grid-template-columns:1fr 1fr}.td-tools{grid-template-columns:1fr 1fr}.td-tools input{grid-column:1/-1}.td-list{grid-template-columns:1fr}}
+
+/* ================= FIX8 · giao diện mới ================= */
+:root{--green:#1F4D3B;--green-d:#123326;--lime:#D4F06B;--paper:#F2F6EF;--ink:#1E2B24;--muted:#617068;--line:#DFE6D8;
+ --k0:#1FA463;--k0d:#147A49;--k0s:#E6F6EC;--k1:#2F7BF5;--k1d:#1C5BC4;--k1s:#E8F0FE;--k2:#8B5CF6;--k2d:#6A3FD1;--k2s:#F1EBFE;--k3:#F28C28;--k3d:#C96B12;--k3s:#FEF1E3;
+ --ok:#22A861;--bad:#E5484D;--star:#FFC233;--k:var(--green);--kd:var(--green-d);--ks:#EAF1E3}
+body[data-skill="0"]{--k:var(--k0);--kd:var(--k0d);--ks:var(--k0s)}body[data-skill="1"]{--k:var(--k1);--kd:var(--k1d);--ks:var(--k1s)}
+body[data-skill="2"]{--k:var(--k2);--kd:var(--k2d);--ks:var(--k2s)}body[data-skill="3"]{--k:var(--k3);--kd:var(--k3d);--ks:var(--k3s)}
+body{font-size:15px;background:var(--paper)}
+/* nút bấm nổi khối, ấn xuống được */
+.btn{min-height:48px;border-radius:14px;font-weight:700;letter-spacing:0;box-shadow:0 4px 0 var(--green-d);transition:transform .08s,box-shadow .08s}
+.btn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--green-d)}
+.btn.light{background:#fff;color:var(--green);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.btn.light:active:not(:disabled){box-shadow:0 1px 0 var(--line)}
+.btn.lime{box-shadow:0 4px 0 #9FBF3A}
+body[data-skill] #work .btn:not(.light),body[data-skill] .celebrate .btn:not(.light){background:var(--k);color:#fff;box-shadow:0 4px 0 var(--kd)}
+body[data-skill] #work .btn:not(.light):active:not(:disabled){box-shadow:0 1px 0 var(--kd)}
+body[data-skill="hub"] #work .btn:not(.light),body[data-skill=""] #work .btn:not(.light),body[data-skill="hub"] .celebrate .btn:not(.light),body[data-skill=""] .celebrate .btn:not(.light){background:var(--green);box-shadow:0 4px 0 var(--green-d)}
+.chip-btn{display:inline-flex;align-items:center;gap:4px;min-height:40px;padding:6px 14px;border-radius:99px;border:2px solid var(--line);background:#fff;color:var(--green);font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap}
+.sfx-toggle{display:inline-grid;place-items:center;width:42px;height:42px;margin-left:auto;margin-right:6px;border-radius:50%;border:2px solid var(--line);background:#fff;font-size:18px;cursor:pointer;flex:none}
+.topbar .nav-toggle{margin-left:0}
+/* ---- bản đồ bài ---- */
+.hub{max-width:640px;margin:0 auto}
+.hub-back{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;font-size:13px;font-weight:600;color:var(--muted)}
+.hub-hero{position:relative;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end;padding:16px;border-radius:24px;background:var(--green);color:#fff;overflow:hidden}
+.hub-pics{grid-column:1/-1;display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:6px;height:190px;margin:-4px -4px 2px}
+.hub-pics img{width:100%;height:100%;object-fit:cover;border-radius:16px;background:#2C6450}
+.hub-pics .hp-main{grid-row:1/3}.hub-pics img.img-fail{visibility:hidden}
+.hub-copy h1{color:#fff;font-size:34px;line-height:1.15;letter-spacing:-.5px;font-weight:800;font-family:Georgia,'Times New Roman',serif}
+.hub-copy p{margin-top:6px;color:#CFE3D6;font-size:13.5px;line-height:1.5}
+.hub-ring{--p:0;width:84px;height:84px;border-radius:50%;display:grid;place-content:center;text-align:center;background:radial-gradient(closest-side,var(--green) 76%,transparent 77%),conic-gradient(var(--lime) calc(var(--p)*1%),rgba(255,255,255,.18) 0)}
+.hub-ring b{font-size:20px;line-height:1;color:#fff}.hub-ring small{font-size:10.5px;color:#CFE3D6}
+.cta-big{display:flex;align-items:center;gap:14px;width:100%;min-height:68px;margin:16px 0 22px;padding:12px 18px;border-radius:18px;background:var(--lime);color:var(--green);box-shadow:0 5px 0 #9FBF3A;text-align:left;font-size:17px;font-weight:800}
+.cta-big:active{transform:translateY(4px);box-shadow:0 1px 0 #9FBF3A}
+.cta-big small{display:block;font-size:12px;font-weight:600;opacity:.75}
+.cta-ico{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#fff;font-size:22px;flex:none}
+.hub-done{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:16px 0 22px;padding:16px;border-radius:18px;background:#fff;border:2px solid var(--line);font-weight:700}
+.skill-path{list-style:none;margin:0;padding:0;position:relative}
+.skill-path::before{content:"";position:absolute;left:31px;top:30px;bottom:40px;width:4px;border-radius:4px;background:var(--line)}
+.skill{position:relative;margin:0 0 16px;padding:0}
+.skill .sk-head{position:relative;display:flex;align-items:center;gap:14px;width:100%;padding:8px 6px;border:0;background:none;text-align:left;cursor:pointer}
+.sk-ico{display:grid;place-items:center;width:64px;height:64px;border-radius:20px;font-size:28px;background:#fff;border:3px solid var(--line);flex:none;z-index:1}
+.sk-txt{flex:1;min-width:0}.sk-txt b{display:block;font-size:18px;color:var(--ink)}.sk-txt small{display:block;font-size:13px;color:var(--muted)}
+.sk-go{font-size:28px;color:var(--muted)}
+.skill.sk-0{--c:var(--k0);--cd:var(--k0d);--cs:var(--k0s)}.skill.sk-1{--c:var(--k1);--cd:var(--k1d);--cs:var(--k1s)}.skill.sk-2{--c:var(--k2);--cd:var(--k2d);--cs:var(--k2s)}.skill.sk-3{--c:var(--k3);--cd:var(--k3d);--cs:var(--k3s)}
+.skill .sk-ico{border-color:var(--c);background:var(--cs);box-shadow:0 4px 0 var(--c)}
+.skill.done .sk-ico{background:var(--c);color:#fff;font-weight:800}
+.skill.here .sk-ico{animation:skPulse 1.8s ease-in-out infinite}
+@keyframes skPulse{50%{box-shadow:0 4px 0 var(--c),0 0 0 8px color-mix(in srgb,var(--c) 22%,transparent)}}
+.chunks{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 0 84px}
+.chunk{position:relative;overflow:hidden;min-width:96px;min-height:52px;padding:7px 12px;border-radius:14px;border:2px solid var(--line);background:#fff;text-align:left;cursor:pointer;box-shadow:0 3px 0 var(--line)}
+.chunk::after{content:"";position:absolute;left:0;bottom:0;height:4px;width:var(--f,0%);background:var(--c)}
+.chunk b{display:block;font-size:14px;color:var(--ink)}.chunk small{display:block;font-size:12px;color:var(--muted)}
+.chunk.done{background:var(--cs);border-color:var(--c);box-shadow:0 3px 0 var(--c)}.chunk.done b{color:var(--cd)}
+.chunk.next{border-color:var(--c);box-shadow:0 3px 0 var(--cd);outline:3px solid color-mix(in srgb,var(--c) 25%,transparent)}
+.chunk:active{transform:translateY(2px);box-shadow:none}
+.hub-tip{margin:6px 0 0;text-align:center;font-size:13px;color:var(--muted)}
+/* ---- trong một bước ---- */
+.skill-band{display:flex;align-items:center;gap:12px;margin:-4px 0 14px;padding:12px 14px;border-radius:18px;background:var(--k);color:#fff}
+.sb-ico{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.2);font-size:24px;flex:none}
+.sb-txt{flex:1;min-width:0}.sb-txt b{display:block;font-size:17px;line-height:1.2}.sb-txt small{font-size:12.5px;opacity:.85}
+.skill-band .chip-btn{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.15);color:#fff}
+.eyebrow.step-eb{display:none}
+.desc-head{justify-content:flex-end;margin-bottom:8px}
+.steps button.active{background:var(--k);color:#fff;border-color:var(--k)}
+.steps button.active b{background:#fff;color:var(--k)}
+.focus-progress i::after,.focus-progress::after{background:var(--k)}
+.chunk-bar{margin:0 0 14px}
+.cb-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
+.cb-top b{font-size:18px;color:var(--kd)}.cb-top b small{font-size:13px;color:var(--muted);font-weight:600}.cb-top span{font-size:13px;color:var(--muted)}
+.cb-segs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:5px}
+.cb-segs i{height:10px;border-radius:99px;background:#E3E8DD}.cb-segs i.ok{background:var(--ok)}.cb-segs i.cur{outline:2px solid var(--k);outline-offset:2px}
+.ex-pic{width:100%;aspect-ratio:16/9;margin:-2px 0 12px;border-radius:14px}
+.study-pic{aspect-ratio:16/9;margin:0 0 12px;border-radius:16px}
+#work .exercise{border:2px solid var(--line);border-radius:20px;background:#fff;box-shadow:0 4px 0 var(--line)}
+#work .exercise .prompt{font-size:20px;line-height:1.5;font-weight:700;color:var(--ink)}
+#work textarea,#work input[type=text],#work input:not([type]){border:2px solid var(--line);border-radius:14px}
+#work textarea:focus,#work input:focus{border-color:var(--k);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--k) 20%,transparent)}
+.feedback{padding:12px 14px;border-radius:14px;font-weight:700;font-size:15px;background:#E3F6EA;color:#156B3F;border:2px solid #9FDDB7}
+.feedback.error{background:#FDECEC;color:#A82A2E;border-color:#F5B5B7}
+.feedback::before{content:"✓ ";font-weight:800}.feedback.error::before{content:"✕ "}
+.shake{animation:shake .38s ease}@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.pop{animation:pop .35s ease}@keyframes pop{50%{transform:scale(1.02)}}
+.options button{min-height:54px;border-radius:14px;border:2px solid var(--line);background:#fff;font-weight:700;font-size:16px;box-shadow:0 3px 0 var(--line)}
+.options button.selected{border-color:var(--k);background:var(--ks);box-shadow:0 3px 0 var(--k)}
+.fc-arrow.next{background:var(--k);border-color:var(--k);box-shadow:0 4px 0 var(--kd)}
+.fc-arrow{box-shadow:0 4px 0 var(--line);border-width:2px}
+.fc-arrow:active:not(:disabled){transform:translateY(3px);box-shadow:none}
+.flash-face{border-width:2px;box-shadow:0 5px 0 var(--line)}
+.pron-btn,.bob-ipa-card .pron-btn{background:var(--k);box-shadow:0 4px 0 var(--kd)}
+.pron-box{background:var(--ks);border-color:transparent}.pron-head strong{color:var(--kd)}
+.learned-toggle.on{border-color:var(--ok);background:#E3F6EA;color:#156B3F}
+/* ---- mừng xong chặng ---- */
+.celebrate{position:fixed;left:0;right:0;top:0;z-index:70;pointer-events:none;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 0}
+.cel-card{pointer-events:auto;max-width:460px;margin:0 auto;padding:16px 16px 14px;border-radius:20px;background:#fff;border:3px solid var(--star);box-shadow:0 14px 40px -12px rgba(20,40,30,.45);text-align:center;animation:celIn .45s cubic-bezier(.2,1.4,.4,1);position:relative}
+@keyframes celIn{from{transform:translateY(-30px) scale(.9);opacity:0}}
+.cel-stars{font-size:26px;letter-spacing:4px}.cel-card b{display:block;font-size:20px;margin-top:2px}.cel-card p{margin:2px 0 10px;color:var(--muted);font-size:13.5px}
+.cel-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cel-actions .btn{margin:0;min-height:46px;font-size:13.5px}
+.cel-x{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;border:0;background:#F1F3EE;cursor:pointer}
+.confetti{position:fixed;inset:0;overflow:hidden;pointer-events:none}
+.confetti i{position:absolute;top:-12px;left:var(--x);width:9px;height:14px;border-radius:2px;background:var(--c);animation:fall 1.6s var(--d) ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg);opacity:.2}}
+/* ---- lộ trình: thẻ bài có ảnh ---- */
+.lesson-card.pic-card{display:grid;grid-template-columns:96px 1fr auto;align-items:center;gap:14px;padding:10px 14px 10px 10px;border-radius:20px;border:2px solid var(--line);background:#fff;box-shadow:0 4px 0 var(--line);text-align:left}
+.lesson-card.pic-card.current{border-color:var(--green);box-shadow:0 4px 0 var(--green)}
+.lc-pic{position:relative;width:96px;height:80px;border-radius:14px;overflow:hidden;background:#DDE7D6}
+.lc-pic img{width:100%;height:100%;object-fit:cover}.lc-pic img.img-fail{visibility:hidden}
+.lc-num{position:absolute;left:6px;top:6px;min-width:30px;height:30px;padding:0 6px;border-radius:10px;display:grid;place-items:center;background:#fff;color:var(--green);font-weight:800;font-size:15px}
+.is-done .lc-num{background:var(--ok);color:#fff}
+.lc-body{min-width:0;display:grid;gap:3px}.lc-body b{font-size:16px;color:var(--ink);line-height:1.3}.lc-body small{font-size:12.5px;color:var(--muted)}
+.lc-skills{display:flex;gap:4px}.lc-skills i{font-style:normal;font-size:14px;width:26px;height:26px;display:grid;place-items:center;border-radius:8px;background:#F1F3EE;filter:grayscale(1);opacity:.55}
+.lc-skills i.half{filter:none;opacity:.8;background:#FFF5DC}.lc-skills i.on{filter:none;opacity:1;background:#E3F6EA}
+.lc-end{font-size:13px;font-weight:700;color:var(--muted)}
+/* ---- điện thoại: chữ & nút to, ít chi tiết ---- */
+#work.focus-mode>h2,#work.focus-mode .question-jumper{display:none}
+@media(max-width:650px){
+ body{font-size:16px}
+ .sync-status{display:none}
+ .mobile-logo{white-space:nowrap;font-size:18px}.profile .profile-name{display:none}
+ .topbar{gap:8px;padding:0 14px}.sfx-toggle{width:40px;height:40px}
+ .content{padding:18px 16px}
+ h1{font-size:26px}h2{font-size:20px}
+ .sub,.small,.instructions,.notice{font-size:14px!important}
+ .btn{min-height:52px;font-size:15px}
+ .stat p,.lesson-info p,.lesson-end,.hero .eyebrow,.quick-learning span,.ipa-tile .small,.mode-bar p,.mode-switch button{font-size:12.5px!important}
+ .lesson-info h3,.quick-learning button strong{font-size:15px!important}
+ .nav button,.nav button[data-go=teacher],.nav summary{font-size:11px!important;gap:4px}
+ .nav svg{width:22px;height:22px}
+ .sidebar{height:74px}
+ .heading:has(+ .lesson-layout){display:none}
+ .steps{margin-bottom:6px}.steps button{min-height:56px;font-size:12px}
+ .hub-pics{height:160px}.hub-copy h1{font-size:30px}.hub-ring{width:76px;height:76px}
+ .skill-path::before{left:29px}.sk-ico{width:58px;height:58px;font-size:26px}.chunks{margin-left:0}
+ .chunk{flex:1 1 calc(50% - 8px);min-width:0}
+ .lesson-card.pic-card{grid-template-columns:84px 1fr auto;gap:12px}.lc-pic{width:84px;height:72px}
+ #work .exercise .prompt{font-size:19px}
+ .cel-actions .btn{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){.skill.here .sk-ico,.confetti i,.cel-card,.shake,.pop{animation:none!important}.confetti{display:none}}
 </style></head><body><div id="app"><p class="loading">Đang mở Bob English…</p></div><div id="toast" role="status" aria-live="polite"></div><noscript>Vui lòng bật JavaScript để học trên Bob English.</noscript>
 <script>'use strict';
 const $=s=>document.querySelector(s),root=$('#app');
@@ -446,7 +584,7 @@ function bindDescriptionSelection(u){
 function go(path){if(location.hash.slice(1)===path)render();else location.hash=path}
 function parseRoute(){let x=location.hash.slice(1).split('/');let page=['home','path','progress','resources','settings','lesson','ipa','catalog','teacher'].includes(x[0])?x[0]:'home';if(['resources','teacher'].includes(page)&&!isTeacher())page='home';let u=Math.max(0,Math.min(13,Math.floor(Number(x[1])||0))),s=Math.max(0,Math.min(3,Math.floor(Number(x[2])||0)));if(page==='lesson'&&!canAccess(u)){toast('Chế độ tuần tự: hoàn thành bài trước hoặc chọn Giảng dạy / khám phá để xem mọi bài.');u=current();s=0}if(page==='lesson'&&!canAccessStage(u,s)){toast('Hoàn thành bước trước hoặc bật chế độ khám phá để xem trước.');s=[0,1,2,3].find(i=>!done(u,i))??0}return{page,u,s,sound:page==='ipa'&&x[1]!==undefined?Math.max(0,Math.min(43,Math.floor(Number(x[1])||0))):null,tab:['translation','listen','description'].includes(x[1])?x[1]:'translation',phase:page==='path'&&['0','1','2','3'].includes(x[1])?x[1]:'all',item:x[3]!==undefined?Math.max(0,Math.floor(Number(x[3])||0)):null}}
 function modeBar(){return `<div class="sync-status" id="sync-status">${isTeacher()?'Tài khoản giáo viên · Có thể mở mọi bài và chọn học liệu gợi ý cho lớp.':'Tài khoản học viên · Có thể tự chọn bài, âm IPA và câu muốn luyện; tiến độ được lưu riêng theo tài khoản.'}</div>`}
-function layout(body){const page=route.page;root.innerHTML=`<div class="shell"><aside class="sidebar"><a href="#home" class="brand"><span class="brandmark">b</span><span>bob<span style="font-weight:450"> english</span><small>LEARN WITH PURPOSE</small></span></a><p class="side-label">KHÔNG GIAN HỌC TẬP</p><nav class="nav" aria-label="Điều hướng chính">${[['home','grid','Tổng quan'],['path','book','Lộ trình học'],['ipa','volume','Bảng IPA'],['progress','chart','Tiến độ']].map(([id,ic,name])=>`<button data-go="${id}" ${page===id||page==='lesson'&&id==='path'?'aria-current="page"':''} class="${page===id||page==='lesson'&&id==='path'?'active':''}">${icon(ic)}${name}</button>`).join('')}<div class="nav-desktop-extra">${[...(isTeacher()?[['resources','headphones','Kho học liệu'],['teacher','gear','Quản lý lớp']]:[]),['settings','gear','Cài đặt']].map(([id,ic,name])=>`<button data-go="${id}" ${page===id?'aria-current="page"':''} class="${page===id?'active':''}">${icon(ic)}${name}</button>`).join('')}</div><details class="nav-more"><summary>${icon('gear')}Thêm</summary><div class="nav-more-list">${[...(isTeacher()?[['resources','headphones','Kho học liệu'],['teacher','gear','Quản lý lớp']]:[]),['settings','gear','Cài đặt']].map(([id,ic,name])=>`<button data-go="${id}" ${page===id?'aria-current="page"':''} class="${page===id?'active':''}">${icon(ic)}${name}</button>`).join('')}</div></details></nav><div class="side-card">${icon('leaf')}<strong>Chậm một chút cũng được.</strong>Mỗi bài hoàn thành là một bước tiến. Cứ tiếp tục nhé!</div><div class="side-bottom">BOB ENGLISH · YOUR DAILY GROWTH</div></aside><main class="main"><header class="topbar"><div class="breadcrumb">Không gian học tập <span style="margin:0 12px">/</span> <b>${({home:'Tổng quan',path:'Lộ trình học',progress:'Tiến độ của tôi',resources:'Kho học liệu',settings:'Cài đặt',lesson:'Lớp học',ipa:'Bảng IPA đầy đủ',catalog:'Thư viện bài tập',teacher:'Quản lý lớp'})[page]}</b></div><a class="brand mobile-logo" href="#home"><span class="brandmark">b</span>bob english</a><a href="#settings" class="profile"><span class="profile-name">${esc(state.name)}</span><span class="avatar">${esc(state.name.slice(0,1).toUpperCase())}</span></a></header><div class="content">${!storageWorks?'<div class="notice warn">Bộ nhớ thiết bị không khả dụng. Kiểm tra trạng thái lưu trực tuyến trước khi đóng trang.</div>':''}${modeBar()}${body}<footer class="footer"><span>© 2026 Bob English · UI 2026.11.02 · Nghe đầy đủ</span><a href="#settings">Hồ sơ & đồng bộ tài khoản ↗</a></footer></div></main></div>`;root.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{if(!isTeacher())return;state.accessMode=b.dataset.mode;save();render();toast(isExplore()?'Đã mở toàn bộ bài và kỹ năng.':'Đã bật học tuần tự. Kết quả cũ được giữ lại.')});root.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));root.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>go('lesson/'+b.dataset.unit+'/0'));root.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>go(`lesson/${route.u}/${b.dataset.step}`))}
+function layout(body){const page=route.page;root.innerHTML=`<div class="shell"><aside class="sidebar"><a href="#home" class="brand"><span class="brandmark">b</span><span>bob<span style="font-weight:450"> english</span><small>LEARN WITH PURPOSE</small></span></a><p class="side-label">KHÔNG GIAN HỌC TẬP</p><nav class="nav" aria-label="Điều hướng chính">${[['home','grid','Tổng quan'],['path','book','Lộ trình học'],['ipa','volume','Bảng IPA'],['progress','chart','Tiến độ']].map(([id,ic,name])=>`<button data-go="${id}" ${page===id||page==='lesson'&&id==='path'?'aria-current="page"':''} class="${page===id||page==='lesson'&&id==='path'?'active':''}">${icon(ic)}${name}</button>`).join('')}<div class="nav-desktop-extra">${[...(isTeacher()?[['resources','headphones','Kho học liệu'],['teacher','gear','Quản lý lớp']]:[]),['settings','gear','Cài đặt']].map(([id,ic,name])=>`<button data-go="${id}" ${page===id?'aria-current="page"':''} class="${page===id?'active':''}">${icon(ic)}${name}</button>`).join('')}</div><details class="nav-more"><summary>${icon('gear')}Thêm</summary><div class="nav-more-list">${[...(isTeacher()?[['resources','headphones','Kho học liệu'],['teacher','gear','Quản lý lớp']]:[]),['settings','gear','Cài đặt']].map(([id,ic,name])=>`<button data-go="${id}" ${page===id?'aria-current="page"':''} class="${page===id?'active':''}">${icon(ic)}${name}</button>`).join('')}</div></details></nav><div class="side-card">${icon('leaf')}<strong>Chậm một chút cũng được.</strong>Mỗi bài hoàn thành là một bước tiến. Cứ tiếp tục nhé!</div><div class="side-bottom">BOB ENGLISH · YOUR DAILY GROWTH</div></aside><main class="main"><header class="topbar"><div class="breadcrumb">Không gian học tập <span style="margin:0 12px">/</span> <b>${({home:'Tổng quan',path:'Lộ trình học',progress:'Tiến độ của tôi',resources:'Kho học liệu',settings:'Cài đặt',lesson:'Lớp học',ipa:'Bảng IPA đầy đủ',catalog:'Thư viện bài tập',teacher:'Quản lý lớp'})[page]}</b></div><a class="brand mobile-logo" href="#home"><span class="brandmark">b</span>bob english</a><a href="#settings" class="profile"><span class="profile-name">${esc(state.name)}</span><span class="avatar">${esc(state.name.slice(0,1).toUpperCase())}</span></a></header><div class="content">${!storageWorks?'<div class="notice warn">Bộ nhớ thiết bị không khả dụng. Kiểm tra trạng thái lưu trực tuyến trước khi đóng trang.</div>':''}${modeBar()}${body}<footer class="footer"><span>© 2026 Bob English · UI 2026.11.02 · Nghe đầy đủ</span><a href="#settings">Hồ sơ & đồng bộ tài khoản ↗</a></footer></div></main></div>`;root.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{if(!isTeacher())return;state.accessMode=b.dataset.mode;save();render();toast(isExplore()?'Đã mở toàn bộ bài và kỹ năng.':'Đã bật học tuần tự. Kết quả cũ được giữ lại.')});root.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));root.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>go('lesson/'+b.dataset.unit));root.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>go(`lesson/${route.u}/${b.dataset.step}`))}
 function heading(title,desc,badge='LỘ TRÌNH 14 TUẦN'){return `<div class="heading"><div><p class="eyebrow">${badge}</p><h1>${title}</h1><p class="sub">${desc}</p></div><span class="pill">${icon('leaf').replace('<svg','<svg width="12" height="12"')} Từng bước một, mỗi ngày</span></div>`}
 function lessonCard(u){let i=u.id,isCurrent=current()===i;return `<button class="lesson-card ${isCurrent?'current':''}" data-unit="${i}"><span class="number">${complete(i)?'✓':String(i+1).padStart(2,'0')}</span><div class="lesson-info"><h3>${u.review?u.title:`Bài ${i+1} · ${u.sounds.join(' & ')}`}</h3><p>Tuần ${u.week} · ${u.review?'Ôn tập & kiểm tra':i===11?'1 bài dịch mới + 1 bài ôn':'2 nhóm IPA · 2 bài dịch'} · Nghe · Mô tả</p><div class="progress"><i style="width:${percent(i)}%"></i></div></div><span class="lesson-end">${complete(i)?'Đã hoàn thành':isCurrent?'<span class="pill">Đang học</span>':icon('arrow')}</span></button>`}
 function home(){const ci=current(),u=units[ci],completed=units.filter(x=>complete(x.id)).length,stages=units.reduce((a,x)=>a+[0,1,2,3].filter(s=>done(x.id,s)).length,0);layout(`${heading(`Chào ${esc(state.name)}!`,'Hôm nay, bạn muốn luyện kỹ năng nào? Chọn bài phù hợp với mình nhé.')}<section class="hero"><div><p class="eyebrow">HÀNH TRÌNH TIẾNG ANH CỦA BẠN</p><h2>Nền tảng vững vàng.<br>Tự tin từng câu nói.</h2><p>14 tuần có hướng dẫn · 2 buổi mỗi tuần · Học theo nhịp của bạn</p><button class="btn lime" data-unit="${ci}">${stages?'Tiếp tục học':'Tiếp tục bài gợi ý'} ${icon('arrow')}</button></div><div class="hero-art" aria-hidden="true"><div class="orbit"></div><div class="sound-card"><span>PRACTICE YOUR SOUND</span><div class="ipa">/iː/</div><span>sheep · see · dream</span><div class="wave">${[9,16,22,13,20,27,16,8,19,13,7].map(h=>`<i style="height:${h}px"></i>`).join('')}</div></div><div class="float-tag">A little progress, every day ✦</div></div></section><div class="stats">${[['book',completed+'/14','Bài học hoàn thành'],['chart',Math.round(stages/56*100)+'%','Tiến độ khóa học'],['calendar',Object.keys(state.activity).length,'Ngày đã học'],['clock','25–35′','Tự học mỗi ngày']].map(([ic,n,t])=>`<div class="stat"><span class="stat-icon">${icon(ic)}</span><div><strong>${n}</strong><p>${t}</p></div></div>`).join('')}</div><div class="two-col"><section><div class="section-head"><h2>Lộ trình của bạn</h2><button class="btn ghost" data-go="path">Xem tất cả ${icon('arrow')}</button></div><div class="phases">${['Xây nền','Kết nối','Vận dụng','Củng cố'].map((t,i)=>`<button data-go="path/${i}">${String(i+1).padStart(2,'0')} · ${t}</button>`).join('')}</div><div class="lesson-list">${units.slice(Math.min(ci,10),Math.min(ci,10)+4).map(lessonCard).join('')}</div></section><aside class="rightbar"><div class="panel"><h3>Kế hoạch tuần ${u.week}</h3><div class="week-top"><span>2 buổi học + tự luyện</span>${icon('calendar').replace('<svg','<svg width="15" height="15"')}</div><div class="days">${['T2','T3','T4','T5','T6','T7','CN'].map((d,i)=>`<div class="day">${d}<b class="${[0,4].includes(i)?'on':''}">${[0,4].includes(i)?'●':'·'}</b></div>`).join('')}</div><p class="small mt">T2 / T6 là gợi ý; bạn có thể chọn ngày khác.</p><div class="schedule-item"><small>BUỔI 1 · 90 PHÚT</small><p>Phát âm & học dịch</p><span>${esc(u.sounds.slice(0,2).join(' · '))}</span></div><div class="schedule-item"><small>BUỔI 2 · 90 PHÚT</small><p>Nghe, mô tả & củng cố</p><span>Vận dụng từ đã học trong tuần</span></div></div><div class="panel tip"><div class="tip-icon">✦ MỘT MẸO NHỎ</div><h3>Đều đặn hơn là vội vàng.</h3><p>Dành 25–35 phút mỗi ngày. Nghe lại, tự dịch rồi mô tả bằng những từ bạn đã biết.</p></div><div class="panel"><h3>Một bài học, bốn bước</h3><div class="flow">${stepNames.map((s,i)=>`<div><b>${i+1}</b><span><strong>${s}</strong>${['Nghe mẫu, đọc và kiểm tra từ','Hiểu ngữ cảnh, tự dịch câu','Nghe và chép lại từng câu','Diễn đạt theo thẻ có sẵn'][i]}</span></div>`).join('')}</div></div></aside></div>`)}
@@ -1314,6 +1452,174 @@ function drawTeacherDashboard(){
 
 const baseTeacherPage=teacherPage;
 teacherPage=async function(){await baseTeacherPage();if(route.page==='teacher')await renderTeacherDashboard()};
+/* ===== FIX8 · Giao diện mới: bản đồ bài + chặng, màu kỹ năng, ảnh, âm thanh ===== */
+const SKILLS=[
+ {ico:'🔊',name:'Phát âm IPA',short:'Phát âm',hint:'Nghe, đọc và chấm điểm từng từ'},
+ {ico:'📘',name:'Học dịch',short:'Học dịch',hint:'Học thẻ từ rồi tự dịch câu'},
+ {ico:'🎧',name:'Luyện nghe',short:'Luyện nghe',hint:'Nghe và chép lại câu'},
+ {ico:'💬',name:'Mô tả từ',short:'Mô tả',hint:'Chọn từ, tự mô tả bằng tiếng Anh'}];
+const CHUNK=8;
+const THEME_IMG=['cozy living room interior','healthy breakfast food','clothes on rack fashion','people exercising fitness','wild animals safari','football match stadium','city street traffic','sunny sky clouds weather','students in classroom','people working office','cinema popcorn movie','travel suitcase airport','doctor hospital','happy friends laughing'];
+
+/* ---------- âm thanh: tự tạo bằng Web Audio, không cần tải file ---------- */
+const SFX={ctx:null,on:(()=>{try{return localStorage.getItem('bob_sfx')!=='off'}catch{return true}})()};
+function sfxCtx(){if(!SFX.ctx){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;SFX.ctx=new C()}if(SFX.ctx.state==='suspended')SFX.ctx.resume();return SFX.ctx}
+function tone(c,t,f1,f2,dur,type='sine',vol=.16){const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f1,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+dur);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g).connect(c.destination);o.start(t);o.stop(t+dur+.02)}
+function sfx(kind){
+ window.__sfx=(window.__sfx||[]).concat(kind);
+ if(kind==='bad')try{navigator.vibrate?.(40)}catch{}
+ if(!SFX.on)return;const c=sfxCtx();if(!c)return;const t=c.currentTime+.01;
+ if(kind==='ok'){tone(c,t,880,0,.13,'sine',.15);tone(c,t+.1,1318.5,0,.22,'sine',.15)}
+ else if(kind==='bad'){tone(c,t,330,196,.22,'triangle',.17);tone(c,t+.12,262,175,.24,'triangle',.12)}
+ else if(kind==='soft'){tone(c,t,660,0,.12,'sine',.1);tone(c,t+.09,740,0,.16,'sine',.08)}
+ else if(kind==='tap'){tone(c,t,1200,900,.06,'sine',.08)}
+ else if(kind==='flip'){tone(c,t,500,820,.09,'sine',.06)}
+ else if(kind==='done'){[523.3,659.3,784,1046.5].forEach((f,i)=>tone(c,t+i*.09,f,0,.28,'sine',.13));tone(c,t+.36,1568,0,.4,'sine',.07)}
+}
+function setSfx(on,quiet){SFX.on=on;try{localStorage.setItem('bob_sfx',on?'on':'off')}catch{}const b=$('#sfx-toggle');if(b){b.textContent=on?'🔊':'🔇';b.setAttribute('aria-label',on?'Tắt âm thanh hiệu ứng':'Bật âm thanh hiệu ứng');b.setAttribute('aria-pressed',String(on))}if(on&&!quiet)sfx('tap')}
+/* phát âm thanh khi kết quả xuất hiện trên màn hình */
+let lastBan=false;
+function sfxForNode(n){
+ if(n.nodeType!==1)return;
+ const fb=n.matches?.('.feedback')?n:n.querySelector?.(':scope > .feedback');
+ if(fb&&fb.closest('#tr-result,#li-result,#quiz-feedback,#desc-result')){const bad=fb.classList.contains('error');sfx(bad?'bad':'ok');const card=fb.closest('#work')?.querySelector('.exercise,.quiz-card,#pane-write');if(card){card.classList.remove('shake','pop');void card.offsetWidth;card.classList.add(bad?'shake':'pop')}return}
+ const pc=n.matches?.('.pron-card')?n:n.querySelector?.('.pron-card');
+ if(pc){sfx(pc.classList.contains('good')?'ok':pc.classList.contains('low')?'bad':'soft');return}
+}
+new MutationObserver(ms=>{for(const m of ms){
+ if(m.type==='childList'){m.addedNodes.forEach(sfxForNode);if(m.target.id==='desc-live'){const ban=!!m.target.querySelector('.bad');if(ban&&!lastBan)sfx('bad');lastBan=ban}}
+ else if(m.type==='attributes'&&m.target.id==='rv-feedback'){const c=m.target.className;if(/\bok\b/.test(c))sfx('ok');else if(/\bbad\b/.test(c)){sfx('bad');const i=$('#rv-input');if(i){i.classList.remove('shake');void i.offsetWidth;i.classList.add('shake')}}}
+}}).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+document.addEventListener('click',e=>{const t=e.target.closest?.('button');if(!t)return;
+ if(t.matches('#learned-toggle,#star-toggle'))sfx(t.classList.contains('on')?'tap':'soft');
+ else if(t.matches('#rv-know'))sfx('soft');
+ else if(t.matches('#rv-miss,[data-opt],[data-pick],[data-chip],.word-picker button'))sfx('tap');
+ else if(t.matches('[data-flip],[data-rvflip]'))sfx('flip');
+},true);
+document.addEventListener('click',e=>{if(e.target.closest?.('[data-flip-area],[data-rvflip-area]'))sfx('flip')},true);
+
+/* ---------- ảnh nhanh dùng chung ---------- */
+function picTag(q,cls='',alt=''){return `<img class="${cls}" src="${bingThumb(q)}" alt="${esc(alt)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.classList.add('img-fail')">`}
+function vocabTerm(v){return String(v||'').split(/[(:\-–=\/]/)[0].replace(/[^A-Za-z' ]/g,' ').replace(/\s+/g,' ').trim()}
+
+/* ---------- chặng (chia nhỏ mỗi bước) ---------- */
+function chunkInfo(u,type){const items=exerciseItems(u,type),key=type==='translation'?'tr':'li',n=Math.ceil(items.length/CHUNK);
+ return [...Array(n)].map((_,k)=>{const part=items.slice(k*CHUNK,(k+1)*CHUNK),ok=part.filter((x,i)=>scoreFor(key,x,k*CHUNK+i)>=80).length;return{k,from:k*CHUNK,size:part.length,ok,done:ok===part.length&&part.length>0}})}
+function skillChunks(u,s){
+ if(s===0){const st=ipaStats(u),items=st.per.map((x,i)=>({label:x.sound,sub:x.learned===x.total?'Xong':`${x.learned}/${x.total} từ`,done:x.learned===x.total,pct:x.total?x.learned/x.total:0,act:{s:0,sound:i}}));items.push({label:'Kiểm tra',sub:st.learned?st.learned+' từ đã học':'Học từ trước',done:done(u.id,0),pct:done(u.id,0)?1:0,act:{s:0,quiz:true},quiz:true});return items}
+ if(s===1||s===2){const type=s===1?'translation':'listen',ch=chunkInfo(u,type),out=[];
+  if(s===1)out.push({label:'Thẻ từ',sub:'Học trước',done:!!p(u.id).translationTheory||ch.some(c=>c.ok>0),pct:0,act:{s:1,study:true}});
+  ch.forEach(c=>out.push({label:'Chặng '+(c.k+1),sub:c.done?'Xong':`${c.ok}/${c.size} câu`,done:c.done,pct:c.size?c.ok/c.size:0,act:{s,from:c.from}}));return out}
+ const g=descGoal(u),c=p(u.id).descDone||{},d=u.words.filter((w,i)=>c[w.keyword]||c[i]).length;
+ return [...Array(g)].map((_,k)=>({label:'Từ '+(k+1),sub:k<d?'Xong':'Tự chọn',done:k<d,pct:k<d?1:0,act:{s:3}}));
+}
+function startChunk(u,a){
+ if(a.s===0){if(a.quiz)window.__startQuiz=true;else window.__ipaStart={u:u.id,s:a.sound??0}}
+ if(a.s===1)state.positions[u.id+':translationView']=a.study?'study':'practice';
+ if(a.from!=null)state.positions[u.id+':'+a.s]=a.from;
+ save();go(`lesson/${u.id}/${a.s}`);
+}
+function nextAction(u){for(let s=0;s<4;s++){if(done(u.id,s))continue;const ch=skillChunks(u,s),c=ch.find(x=>!x.done&&!(x.quiz&&ipaStats(u).learned<ipaStats(u).total));if(c)return{s,c}}return null}
+
+/* ---------- bản đồ bài học ---------- */
+function lessonHub(){
+ const u=units[route.u],pct=percent(u.id),nx=nextAction(u),word0=ipaFor(u)[0]?.words?.[0]?.word,word1=ipaFor(u)[1]?.words?.[0]?.word;
+ const title=u.review?u.title:u.sounds.join(' & ');
+ layout(`<div class="hub">
+ <nav class="hub-back"><button type="button" class="chip-btn" data-go="path">‹ Lộ trình</button><span>Tuần ${u.week} · ${u.review?'Củng cố':'Bài '+(u.id+1)}</span></nav>
+ <header class="hub-hero">
+  <div class="hub-pics" aria-hidden="true">${picTag(THEME_IMG[u.id]||'english lesson','hp-main')}${word0?picTag(word0+' photo','hp-a'):''}${word1?picTag(word1+' photo','hp-b'):''}</div>
+  <div class="hub-copy"><h1>${esc(title)}</h1><p>${u.review?'Ôn tập từ học liệu đã học':u.translations.map(t=>esc(t.title)).join('<br>')}</p></div>
+  <div class="hub-ring" style="--p:${pct}"><b>${pct}%</b><small>bài này</small></div>
+ </header>
+ ${nx?`<button type="button" class="btn cta-big" id="hub-continue"><span class="cta-ico">${SKILLS[nx.s].ico}</span><span><small>${pct?'Học tiếp':'Bắt đầu'}</small>${SKILLS[nx.s].name} · ${esc(nx.c.label)}</span></button>`:`<div class="hub-done">🎉 Bạn đã hoàn thành bài này! <button type="button" class="btn" data-go="path">Chọn bài tiếp theo</button></div>`}
+ <ol class="skill-path">${SKILLS.map((k,s)=>{const ch=skillChunks(u,s),sp=stagePct(u.id,s),isDone=done(u.id,s),here=nx&&nx.s===s;return `<li class="skill sk-${s} ${isDone?'done':''} ${here?'here':''}">
+  <button type="button" class="sk-head" data-hub-step="${s}"><span class="sk-ico">${isDone?'✓':k.ico}</span><span class="sk-txt"><b>${k.name}</b><small>${isDone?'Đã hoàn thành':sp?sp+'% · '+k.hint:k.hint}</small></span><span class="sk-go">›</span></button>
+  <div class="chunks">${ch.map((c,i)=>`<button type="button" class="chunk ${c.done?'done':''} ${here&&nx.c===c?'next':''}" data-chunk="${s}:${i}" style="--f:${Math.round(c.pct*100)}%"><b>${c.done?'✓ ':''}${esc(c.label)}</b><small>${esc(c.sub)}</small></button>`).join('')}</div></li>`}).join('')}</ol>
+ <p class="hub-tip">Mỗi chặng khoảng 5–10 phút. Học xong chặng nào, tiến độ lưu ngay chặng đó.</p>
+ </div>`);
+ bindExtras();
+ const cont=$('#hub-continue');if(cont)cont.onclick=()=>startChunk(u,nx.c.act);
+ root.querySelectorAll('[data-hub-step]').forEach(b=>b.onclick=()=>go(`lesson/${u.id}/${b.dataset.hubStep}`));
+ root.querySelectorAll('[data-chunk]').forEach(b=>b.onclick=()=>{const [s,i]=b.dataset.chunk.split(':').map(Number);startChunk(u,skillChunks(u,s)[i].act)});
+}
+
+/* ---------- trong một bước: dải màu kỹ năng + tiến độ chặng ---------- */
+function decorateStep(){
+ if(route.page!=='lesson'||route.hub)return;const work=$('#work'),u=units[route.u],s=route.s;if(!work)return;
+ document.body.dataset.skill=s;root.querySelector('.lesson-layout')?.classList.add('sk-'+s);
+ if(!work.querySelector('.skill-band'))work.insertAdjacentHTML('afterbegin',`<div class="skill-band"><span class="sb-ico">${SKILLS[s].ico}</span><div class="sb-txt"><b>${SKILLS[s].name}</b><small>Bước ${s+1}/4 · ${u.review?u.title:'Bài '+(u.id+1)}</small></div><button type="button" class="chip-btn" data-go="lesson/${u.id}">🗺 Bản đồ bài</button></div>`);
+ work.querySelectorAll(':scope>.eyebrow,.desc-head .eyebrow').forEach(e=>{if(/^BƯỚC/i.test(e.textContent.trim()))e.classList.add('step-eb')});
+ work.querySelectorAll('.skill-band [data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+}
+const baseStageNavigation=stageNavigation;
+stageNavigation=function(){baseStageNavigation();queueMicrotask(decorateStep)};
+
+/* thanh tiến độ chặng cho Học dịch / Luyện nghe (thay bản cũ) */
+focusExercise=function(kind){
+ const work=$('#work'),ex=work?.querySelector('.exercise');if(!ex)return;
+ const type=kind==='tr'?'translation':'listen',u=units[route.u],items=exerciseItems(u,type),ch=chunkInfo(u,type),k=Math.floor(cardIndex/CHUNK),c=ch[k]||{from:0,size:items.length,ok:0};
+ const prev=$('#'+kind+'-prev'),next=$('#'+kind+'-next'),pos=cardIndex-c.from;
+ ex.querySelector('small')?.classList.add('ex-source');
+ const segs=items.slice(c.from,c.from+c.size).map((x,i)=>`<i class="${scoreFor(kind,x,c.from+i)>=80?'ok':''} ${i===pos?'cur':''}"></i>`).join('');
+ ex.insertAdjacentHTML('beforebegin',`<div class="chunk-bar"><div class="cb-top"><b>Chặng ${k+1}<small>/${ch.length}</small></b><span>Câu ${pos+1}/${c.size} · ${c.ok} câu đạt</span></div><div class="cb-segs">${segs}</div></div>`);
+ if(kind==='tr'){const it=items[cardIndex],term=vocabTerm(it?.vocab);if(term&&!/^vocabulary/i.test(term)){ex.insertAdjacentHTML('afterbegin',`<div class="ex-pic fimg"><div class="fimg-ph"><b>${esc(term.charAt(0).toUpperCase())}</b></div></div>`);fillImage(ex.querySelector('.ex-pic'),{word:term})}}
+ const lastInChunk=pos===c.size-1,last=cardIndex>=items.length-1;
+ ex.insertAdjacentHTML('afterend',fcNav(prev?.disabled,`${pos+1} / ${c.size}`,last?'Hết câu':lastInChunk?'Chặng tiếp':'Câu tiếp'));
+ const nb=$('#fc-next');if(next?.disabled)nb.disabled=true;
+ $('#fc-prev').onclick=()=>prev?.click();nb.onclick=()=>{next?.click();$('#work').scrollIntoView({block:'start',behavior:'smooth'})};
+ prev?.closest('.action-row')?.classList.add('fc-hidden');
+ work.classList.add('focus-mode');
+ focusDrawer();
+};
+/* mừng khi xong một chặng */
+function celebrate(title,line,actions=[]){
+ sfx('done');$('#celebrate')?.remove();
+ const el=document.createElement('div');el.id='celebrate';el.className='celebrate';el.setAttribute('role','status');
+ el.innerHTML=`<div class="confetti" aria-hidden="true">${[...Array(18)].map((_,i)=>`<i style="--x:${(i*53)%100}%;--d:${(i%6)*.08}s;--c:${['#FFC233','#2BB673','#2F7BF5','#F28C28','#8B5CF6','#E5484D'][i%6]}"></i>`).join('')}</div><div class="cel-card"><div class="cel-stars">⭐⭐⭐</div><b>${esc(title)}</b><p>${esc(line)}</p><div class="cel-actions">${actions.map((a,i)=>`<button type="button" class="btn ${i?'light':''}" data-cel="${i}">${esc(a[0])}</button>`).join('')}<button type="button" class="cel-x" aria-label="Đóng">✕</button></div></div>`;
+ document.body.appendChild(el);
+ el.querySelectorAll('[data-cel]').forEach(b=>b.onclick=()=>{el.remove();actions[Number(b.dataset.cel)][1]()});
+ el.querySelector('.cel-x').onclick=()=>el.remove();
+ clearTimeout(window.__celT);window.__celT=setTimeout(()=>el.isConnected&&el.remove(),9000);
+}
+addEventListener('hashchange',()=>$('#celebrate')?.remove());
+document.addEventListener('click',e=>{const b=e.target.closest?.('#tr-check,#li-check');if(!b||route.page!=='lesson')return;
+ const kind=b.id.slice(0,2),type=kind==='tr'?'translation':'listen',u=units[route.u],k=Math.floor(cardIndex/CHUNK),before=chunkInfo(u,type)[k]?.done;
+ setTimeout(()=>{const ch=chunkInfo(u,type),c=ch[k];if(!c||before||!c.done)return;
+  const nextC=ch.find(x=>!x.done&&x.k>k)||ch.find(x=>!x.done);
+  celebrate(`Xong chặng ${k+1}/${ch.length}!`,nextC?`${SKILLS[route.s].name}: còn ${ch.filter(x=>!x.done).length} chặng.`:'Bạn đã đạt mọi câu của bước này.',
+   nextC?[['Sang chặng '+(nextC.k+1),()=>{cardIndex=nextC.from;state.positions[u.id+':'+route.s]=nextC.from;save();kind==='tr'?translationView():listeningView()}],['Bản đồ bài',()=>go('lesson/'+u.id)]]:[['Hoàn thành bước',()=>finish(route.s)],['Bản đồ bài',()=>go('lesson/'+u.id)]]);
+ },0);
+},true);
+/* IPA: mừng khi thuộc hết từ của một âm */
+const baseSetIpaLearned=setIpaLearned;
+setIpaLearned=function(u,sound,word,val,rerender){
+ const before=ipaStats(u).per.find(x=>x.sound===sound);baseSetIpaLearned(u,sound,word,val,rerender);const after=ipaStats(u).per.find(x=>x.sound===sound);
+ if(val&&before&&after&&before.learned<before.total&&after.learned===after.total){const st=ipaStats(u),left=st.per.filter(x=>x.learned<x.total);celebrate(`Xong âm ${sound}!`,left.length?`Còn âm ${left.map(x=>x.sound).join(', ')}.`:'Bạn đã thuộc hết từ của bài. Làm kiểm tra nhanh nhé.',left.length?[['Học âm '+left[0].sound,()=>{const i=st.per.indexOf(left[0]);window.__ipaStart={u:u.id,s:i};ipaFocus.route=null;focusIpaView()}],['Bản đồ bài',()=>go('lesson/'+u.id)]]:[['Kiểm tra '+st.learned+' từ',()=>{quizIndex=0;quizChoice=null;ipaQuiz()}],['Bản đồ bài',()=>go('lesson/'+u.id)]])}
+};
+const baseIpaResume=ipaResume;
+ipaResume=function(u){const a=window.__ipaStart;if(a&&a.u===u.id){window.__ipaStart=null;const snd=selectedIpaSounds(u)[a.s];if(snd){const wi=snd.words.findIndex(w=>!ipaLearned(u.id,snd.sound,w.word));return{s:a.s,w:wi<0?0:wi,end:false}}}return baseIpaResume(u)};
+ipaView=function(){focusIpaView();if(window.__startQuiz){window.__startQuiz=false;quizIndex=0;quizChoice=null;ipaQuiz()}};
+const baseFinish=finish;finish=function(s){sfx('done');baseFinish(s)};
+
+/* ---------- học liệu dịch: ảnh cho từng thẻ ---------- */
+const baseFocusStudy=focusStudy;
+focusStudy=function(){baseFocusStudy();const cur=[...root.querySelectorAll('section.study-card > article.study-card')].find(a=>!a.classList.contains('fc-hidden'));if(!cur||cur.querySelector('.study-pic'))return;const term=vocabTerm(cur.querySelector('h3')?.textContent);if(!term||/^vocabulary/i.test(term))return;cur.insertAdjacentHTML('afterbegin',`<div class="study-pic fimg"><div class="fimg-ph"><b>${esc(term.charAt(0).toUpperCase())}</b><span>${esc(term)}</span></div><button type="button" class="fimg-swap" hidden>↻ Ảnh khác</button></div>`);fillImage(cur.querySelector('.study-pic'),{word:term})};
+
+/* ---------- lộ trình: thẻ bài có ảnh ---------- */
+lessonCard=function(u){const i=u.id,isCurrent=current()===i,pc=percent(i),dn=complete(i);
+ return `<button class="lesson-card pic-card ${isCurrent?'current':''} ${dn?'is-done':''}" data-unit="${i}"><span class="lc-pic">${picTag(THEME_IMG[i]||'english lesson','','')}<span class="lc-num">${dn?'✓':i+1}</span></span><span class="lc-body"><b>${u.review?esc(u.title):`Bài ${i+1} · ${esc(u.sounds.join(' & '))}`}</b><small>Tuần ${u.week}${u.descTheme?' · '+esc(u.descTheme):''}</small><span class="lc-skills">${SKILLS.map((k,s)=>`<i class="${done(i,s)?'on':stagePct(i,s)?'half':''}" title="${k.name}">${k.ico}</i>`).join('')}</span><span class="progress"><i style="width:${pc}%"></i></span></span><span class="lc-end">${dn?'Xong':isCurrent?'<span class="pill">Đang học</span>':pc?pc+'%':'›'}</span></button>`};
+
+/* ---------- định tuyến: lesson/u = bản đồ bài ---------- */
+const baseParseRoute=parseRoute;
+parseRoute=function(){const r=baseParseRoute();r.hub=r.page==='lesson'&&/^#lesson\/\d+\/?$/.test(location.hash);return r};
+const baseLesson=lesson;
+lesson=function(){document.body.dataset.skill=route.hub?'hub':route.s;if(route.hub){lessonHub();return}baseLesson();root.querySelectorAll('.heading [data-go="path"]').forEach(b=>{b.dataset.go='lesson/'+route.u;b.innerHTML='🗺 Bản đồ bài';b.onclick=()=>go('lesson/'+route.u)})};
+const baseLayout8=layout;
+layout=function(body){baseLayout8(body);const bar=root.querySelector('.topbar');if(bar&&!$('#sfx-toggle')){const b=document.createElement('button');b.type='button';b.id='sfx-toggle';b.className='sfx-toggle';b.onclick=e=>{e.preventDefault();e.stopPropagation();setSfx(!SFX.on)};const t=$('#nav-toggle');t?bar.insertBefore(b,t):bar.prepend(b);setSfx(SFX.on,true)}
+ if(route.page!=='lesson')document.body.dataset.skill='';};
+/* ===== hết FIX8 ===== */
+
 ipaQuiz=function(){
  const u=units[route.u],qs=ipaQuestions(u),st=ipaStats(u);
  if(!qs.length){$('#work').innerHTML=`<section class="flash-done"><div class="fd-ico">📝</div><h2>Chưa có từ để kiểm tra</h2><p>Bài kiểm tra chỉ hỏi những từ bạn đã học. Hãy học ít nhất 1 từ: đọc đạt từ 70% hoặc bấm “Đánh dấu đã thuộc”.</p><div class="fd-actions"><button class="btn" id="back-ipa">Về học từ</button></div></section>`;$('#back-ipa').onclick=()=>ipaView();return}
