@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#204b3c"><meta name="bob-build" content="UI-PROMAX-20261120-FIX9-SKILLS"><title>Bob English — Lớp học của bạn</title><meta name="description" content="Lộ trình học tiếng Anh 14 tuần, tài khoản riêng và bài học có hướng dẫn.">
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#204b3c"><meta name="bob-build" content="UI-PROMAX-20261120-FIX10-VOICE"><title>Bob English — Lớp học của bạn</title><meta name="description" content="Lộ trình học tiếng Anh 14 tuần, tài khoản riêng và bài học có hướng dẫn.">
 <!-- CHỈ CẦN THAY URL BÊN DƯỚI SAU KHI TRIỂN KHAI MÁY CHỦ. KHÔNG ĐIỀN MẬT KHẨU VÀO MÃ NÀY. -->
 <script>// Điền URL Worker của bạn sau khi triển khai server-private.
 // Sau khi sửa nguồn này: node scripts/build-index.mjs
@@ -493,6 +493,7 @@ body[data-skill="hub"] #work .btn:not(.light),body[data-skill=""] #work .btn:not
 .phrase-chips span{width:100%;text-align:center;font-size:12.5px;color:var(--muted)}
 .phrase-chips button.heard{border-color:var(--k)}
 .auto-next{display:flex;gap:8px;align-items:center;font-size:13.5px;color:var(--muted)}
+.voice-panel .btn{margin-top:8px}
 </style></head><body><div id="app"><p class="loading">Đang mở Bob English…</p></div><div id="toast" role="status" aria-live="polite"></div><noscript>Vui lòng bật JavaScript để học trên Bob English.</noscript>
 <script>'use strict';
 const $=s=>document.querySelector(s),root=$('#app');
@@ -805,7 +806,7 @@ function pronStart(btn){
  const {SR,inApp}=pronSupport(),box=btn.closest('.pron-box'),out=box.querySelector('.pron-result');
  if(PRON.rec){const same=PRON.btn===btn;try{PRON.rec.stop()}catch{}if(same)return;try{PRON.rec.abort()}catch{}}
  if(!SR){out.innerHTML=`<div class="feedback error">${inApp?'Bạn đang mở trang trong ứng dụng (Zalo, Facebook…), nơi chưa hỗ trợ chấm phát âm. Bấm ⋯ ở góc trên rồi chọn <b>Mở bằng trình duyệt</b> (Chrome hoặc Safari).':'Trình duyệt này chưa hỗ trợ chấm phát âm. Hãy mở trang bằng <b>Chrome</b> (Android, máy tính) hoặc <b>Safari</b> (iPhone, iPad).'}</div>`;return}
- try{speechSynthesis.cancel()}catch{}stopRecording();
+ try{speechSynthesis.cancel()}catch{}voiceStop();stopRecording();
  const kind=btn.dataset.pron,target=btn.dataset.ptarget,r=new SR();
  r.lang='en-US';r.interimResults=true;r.maxAlternatives=5;r.continuous=false;
  let finals=[],interim='',err='',ended=false;
@@ -855,7 +856,7 @@ function stopRecording(){if(recording&&recording.state!=='inactive')recording.st
 function progressPage(){let completed=units.filter(x=>complete(x.id)).length;layout(`${heading('Nhìn lại những bước tiến.','Tiến bộ đến từ những lần quay lại luyện tập.','TIẾN ĐỘ CỦA TÔI')}<div class="grid"><div class="card"><p>Bài học đã hoàn thành</p><div class="big-num">${completed} <small>/ 14</small></div><div class="progress mt"><i style="width:${completed/14*100}%"></i></div></div><div class="card"><p>Ngày có hoạt động học</p><div class="big-num">${Object.keys(state.activity).length}</div><p>Được ghi khi bạn làm bài kiểm tra.</p></div><div class="card"><p>Bước học đã hoàn thành</p><div class="big-num">${units.reduce((a,u)=>a+[0,1,2,3].filter(s=>done(u.id,s)).length,0)} <small>/ 56</small></div><p>Mỗi bài gồm bốn bước theo thứ tự.</p></div></div><div class="panel mt"><h3>Hành trình 14 tuần</h3><div class="bar-chart">${units.map(u=>`<div style="height:${Math.max(3,percent(u.id))}%" title="Tuần ${u.week}: ${percent(u.id)}%"><span>${u.week}</span></div>`).join('')}</div><p class="small" style="margin-top:35px">Chiều cao cột là tỷ lệ hoàn thành của từng bài.</p></div><div class="panel"><h3>Chi tiết kết quả</h3><div class="table-wrap"><table><thead><tr><th>Bài</th>${stepNames.map(s=>`<th>${s}</th>`).join('')}<th>Trạng thái</th></tr></thead><tbody>${units.map(u=>`<tr><td>${u.week}. ${u.review?u.title:esc(u.sounds.join(' & '))}</td>${stepNames.map((s,i)=>`<td>${done(u.id,i)?i===3?'✓ Tự xác nhận':'✓ Hoàn thành':'—'}</td>`).join('')}<td>${complete(u.id)?'Hoàn thành':'Có thể học bất cứ lúc nào'}</td></tr>`).join('')}</tbody></table></div></div><div class="notice">Kết quả dịch và nghe là mức khớp với câu mẫu. Mô tả từ được học viên tự đánh giá; các kết quả này không thay thế đánh giá năng lực của giáo viên.</div><button class="btn" data-unit="${current()}">Tiếp tục hành trình ${icon('arrow')}</button>`)}
 function resourcesPage(){let filtered=data.taboo.filter(w=>norm(w.keyword+' '+w.vietnamese_keyword+' '+w.category).includes(norm(search)));let pages=Math.ceil(filtered.length/12);resourcePage=Math.min(resourcePage,Math.max(0,pages-1));layout(`${heading('Học liệu quen thuộc. Một nơi duy nhất.','Giữ nguyên câu, từ vựng, giải thích và bài dịch từ các file bạn cung cấp.','KHO HỌC LIỆU')}<div class="notice">Kho tham khảo không tính hoàn thành bài. Để ghi nhận tiến độ, hãy học trong Lộ trình học.</div><div class="grid">${[['44','âm IPA','ipa.html'],['23','bài dịch','hoc_dich.html'],['380','thẻ mô tả từ','taboo.html']].map(([n,t,file])=>`<div class="card"><div class="big-num">${n}</div><h3>${t}</h3><p>Bản gốc để tham khảo và giảng dạy.</p><a class="btn light" href="#" data-material="${file}">Mở học liệu gốc ↗</a></div>`).join('')}</div><div class="resource-list"><a href="#" data-material="listening.html">Công cụ luyện nghe gốc · nhập nội dung tùy chọn <span>↗</span></a></div><div class="section-head mt"><h2>Khám phá thẻ mô tả</h2><span class="small">${filtered.length} thẻ</span></div><label class="field" for="resource-search">Tìm theo từ hoặc chủ đề</label><input type="text" id="resource-search" value="${esc(search)}" placeholder="Ví dụ: FOOD, thể thao, nhà cửa…"><div class="grid mt">${filtered.slice(resourcePage*12,resourcePage*12+12).map(w=>`<article class="card"><span class="tag">${esc(w.category)}</span><h3 class="mt">${esc(w.keyword)}</h3><p>${esc(w.ipa)} · ${esc(w.vietnamese_keyword)}</p><button class="btn light" data-speak="${esc(w.keyword)}">Nghe từ</button><details class="mt"><summary class="small">Từ bị cấm khi mô tả</summary><p>${w.taboo.map(esc).join(' · ')}</p><p>${w.vietnamese_taboo.map(esc).join(' · ')}</p></details></article>`).join('')||'<p>Không có thẻ phù hợp.</p>'}</div><div class="action-row"><button class="btn light" id="res-prev" ${resourcePage===0?'disabled':''}>← Trước</button><span class="small">Trang ${pages?resourcePage+1:0}/${pages}</span><button class="btn light" id="res-next" ${resourcePage>=pages-1?'disabled':''}>Tiếp →</button></div>`);bindSpeak();$('#resource-search').oninput=e=>{let pos=e.target.selectionStart;search=e.target.value;resourcePage=0;resourcesPage();$('#resource-search').focus();$('#resource-search').setSelectionRange(pos,pos)};$('#res-prev').onclick=()=>{resourcePage--;resourcesPage()};$('#res-next').onclick=()=>{resourcePage++;resourcesPage()}}
 function settingsPage(){layout(`${heading('Thiết lập góc học của bạn.','Lưu thông tin học viên và giữ một bản sao tiến độ.','CÀI ĐẶT')}<div class="plan-grid"><section class="card"><h3>Hồ sơ học tập</h3><p>${esc(account?.username)} · ${isTeacher()?'Giáo viên':'Học viên'}</p><a class="btn light" href="#" data-logout>Đăng xuất</a><label class="field" for="name">Tên hiển thị</label><input id="name" type="text" maxlength="40" value="${esc(state.name)}"><label class="field" for="start">Ngày bắt đầu lộ trình</label><input id="start" type="date" value="${esc(state.start)}"><button class="btn mt" id="save-profile">Lưu thay đổi</button><p>Ngày bắt đầu dùng để tham khảo lịch. Bài được mở theo tiến độ, không theo ngày.</p></section><section class="card"><h3>Bản sao tiến độ</h3><p>Tiến độ được lưu riêng theo tài khoản trên máy chủ và tự đồng bộ khi có kết nối. Xuất bản sao để chuyển sang trình duyệt khác.</p><button class="btn" id="export">Xuất tiến độ (.json)</button><label class="field" for="import">Khôi phục từ bản sao (thay thế tiến độ hiện tại)</label><input id="import" type="file" accept="application/json,.json"><p>Bản sao chứa bài làm cá nhân; hãy giữ riêng cho mình.</p></section><section class="card"><h3>Phạm vi phiên bản hiện tại</h3><div class="details"><div><strong>Đã có</strong><span>Lộ trình tuần tự, bài tập tự học, kiểm tra theo câu mẫu, lưu bài làm, thu âm và xuất tiến độ.</span></div><div><strong>Tài khoản và khóa học</strong><span>Đã có tài khoản do giáo viên tạo và lưu tiến độ riêng trên máy chủ. Thanh toán chưa được tích hợp.</span></div></div></section><section class="card"><h3>Cách tự học hiệu quả</h3><p>Buổi 1 học IPA và dịch. Trong tuần làm 25–35 phút/ngày. Buổi 2 luyện nghe và mô tả. Hoàn thành bốn bước để mở bài mới.</p><p>Tuần 13 ôn nguyên âm. Tuần 14 ôn phụ âm và tổng kết. Speaking chuyên sâu vẫn học riêng với giáo viên.</p><button class="btn light" data-go="path">Xem lộ trình</button></section></div>`);$('#save-profile').onclick=()=>{state.name=$('#name').value.trim()||'Bạn học';state.start=$('#start').value||new Date().toISOString().slice(0,10);save();settingsPage();toast('Đã lưu hồ sơ.')};$('#export').onclick=()=>{let blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='bob-english-tien-do.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000)};$('#import').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{if(f.size>3000000)throw Error();let v=JSON.parse(await f.text());if(v.version!==1||typeof v.name!=='string'||!v.progress||typeof v.progress!=='object'||Array.isArray(v.progress)||!v.drafts||typeof v.drafts!=='object'||!v.activity||typeof v.activity!=='object')throw Error();for(const [key,item] of Object.entries(v.progress)){if(!/^([0-9]|1[0-3])$/.test(key)||!item||typeof item!=='object')throw Error();for(const name of ['ipaChecks','ipaAnswers','trScores','liScores','descDone'])if(item[name]&&(typeof item[name]!=='object'||Array.isArray(item[name])))throw Error()}if(Object.values(v.drafts).some(x=>typeof x!=='string'))throw Error();if(!confirm('Khôi phục bản sao này sẽ thay thế tiến độ đang lưu trên trình duyệt. Tiếp tục?'))return;state=v;state.notes||={};state.positions||={};if(!['explore','guided'].includes(state.accessMode))state.accessMode='explore';save();settingsPage();toast('Đã khôi phục tiến độ.')}catch{toast('File tiến độ không hợp lệ. Hãy chọn bản sao xuất từ Bob English.')}e.target.value=''}}
-function render(){if(!data||!account)return;const old=route;route=parseRoute();stopRecording();if('speechSynthesis'in window)speechSynthesis.cancel();if(!old||old.u!==route.u||old.s!==route.s||old.page!==route.page||old.item!==route.item){activeSound=state.positions[route.u+':sound']||0;cardIndex=route.item??state.positions[route.u+':'+route.s]??0;descIndex=Math.min(2,state.positions[route.u+':desc']||0);quizIndex=0;quizChoice=null}({home,path:pathPage,lesson,progress:progressPage,resources:resourcesPage,settings:settingsPage,ipa:ipaPage,catalog:catalogPage,teacher:teacherPage}[route.page])();window.scrollTo({top:0,behavior:'instant'})}
+function render(){if(!data||!account)return;const old=route;route=parseRoute();stopRecording();voiceStop();if('speechSynthesis'in window)speechSynthesis.cancel();try{route.u!=null&&voicePrefetch(units[route.u])}catch{}if(!old||old.u!==route.u||old.s!==route.s||old.page!==route.page||old.item!==route.item){activeSound=state.positions[route.u+':sound']||0;cardIndex=route.item??state.positions[route.u+':'+route.s]??0;descIndex=Math.min(2,state.positions[route.u+':desc']||0);quizIndex=0;quizChoice=null}({home,path:pathPage,lesson,progress:progressPage,resources:resourcesPage,settings:settingsPage,ipa:ipaPage,catalog:catalogPage,teacher:teacherPage}[route.page])();window.scrollTo({top:0,behavior:'instant'})}
 function previewLink(u,s,label,item=null){const path=`lesson/${u}/${s}${item===null?'':'/'+item}`;if(!isTeacher()&&!canAccessStage(u,s))return '<button class="btn light" disabled>Hoàn thành bước trước để mở</button>';return canAccessStage(u,s)?`<button class="btn light" data-go="${path}">${label} ${icon('arrow')}</button>`:`<button class="btn light" data-preview="${path}">Xem trước · ${label}</button>`}
 function bindExtras(){root.querySelectorAll('[data-preview]').forEach(b=>b.onclick=()=>{if(!isTeacher())return;state.accessMode='explore';save();go(b.dataset.preview)});root.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go))}
 function catalogPage(){
@@ -1906,6 +1907,71 @@ startChunk=function(u,a){if(a.pairs)window.__startPairs=true;baseStartChunk9(u,a
 const baseIpaView9=ipaView;
 ipaView=function(){baseIpaView9();if(window.__startPairs){window.__startPairs=false;pairsGame(units[route.u])}};
 /* ===== hết FIX9 ===== */
+/* ===== FIX10: giọng đọc tự nhiên (Kokoro, tạo sẵn) ===== */
+const VOICE={base:'audio/',map:null,packs:{},loading:{},el:null,tok:0,on:true,ready:null,count:0};
+try{VOICE.on=localStorage.getItem('bob_voice')!=='off'}catch{}
+const VOICE_SILENT='data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAAAAAAAAAAAAAA//OEwAAAAAAAAAAAAEluZm8AAAAPAAAABwAAA2AAVVVVVVVVVVVVVVVVVVVxcXFxcXFxcXFxcXFxcY6Ojo6Ojo6Ojo6Ojo6Oqqqqqqqqqqqqqqqqqqqqx8fHx8fHx8fHx8fHx8fj4+Pj4+Pj4+Pj4+Pj4///////////////////AAAAAExhdmM2MC4zMQAAAAAAAAAAAAAAACQEIAAAAAAAAANgmVBi7QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//NExAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExFMAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKYAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMu//NExKwAAANIAAAAADEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NExKwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
+function vNorm(t){return String(t||'').toLowerCase().replace(/[‘’]/g,"'").replace(/[^a-z0-9' ]+/g,' ').replace(/\s+/g,' ').trim()}
+function vKey(t){const s=vNorm(t);let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0}return ('0000000'+h.toString(16)).slice(-8)}
+function voiceIndex(){
+ if(!VOICE.ready)VOICE.ready=fetch(VOICE.base+'index.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(j=>{
+  if(!j||!j.packs)return null;const m={};Object.entries(j.packs).forEach(([p,keys])=>keys.forEach(k=>m[k]=p));VOICE.map=m;VOICE.count=Object.keys(m).length;return m}).catch(()=>null).then(m=>{VOICE.done=true;return m});
+ return VOICE.ready}
+function loadPack(p){
+ if(VOICE.packs[p])return Promise.resolve(VOICE.packs[p]);
+ if(!VOICE.loading[p])VOICE.loading[p]=fetch(VOICE.base+'p/'+p+'.json').then(r=>{if(!r.ok)throw Error('pack');return r.json()}).then(j=>VOICE.packs[p]=j).catch(e=>{delete VOICE.loading[p];throw e});
+ return VOICE.loading[p]}
+function voiceEl(){if(!VOICE.el){VOICE.el=new Audio();VOICE.el.preload='auto';VOICE.el.setAttribute('playsinline','')}return VOICE.el}
+function voiceStop(){VOICE.tok++;try{VOICE.el&&VOICE.el.pause()}catch{}}
+/* iPhone chỉ cho phát âm thanh khi người dùng vừa chạm: mở khóa một lần ở lần chạm đầu */
+(function(){const unlock=()=>{const el=voiceEl();if(VOICE.unlocked)return;VOICE.unlocked=true;try{el.src=VOICE_SILENT;const pr=el.play();pr&&pr.catch(()=>{VOICE.unlocked=false})}catch{VOICE.unlocked=false}};
+ document.addEventListener('pointerdown',unlock,true);document.addEventListener('touchstart',unlock,{capture:true,passive:true});document.addEventListener('keydown',unlock,true)})();
+function voicePrefetch(u){
+ if(!VOICE.on||!u||!data)return;voiceIndex().then(m=>{if(!m)return;const ps=new Set();
+  try{ipaFor(u).forEach(x=>ps.add('ipa'+data.ipa.indexOf(x)))}catch{}
+  try{ps.add('ds'+units.indexOf(u))}catch{}
+  try{(u.translations||[]).forEach(t=>ps.add('tr'+data.translations.indexOf(t)))}catch{}
+  const have=new Set(Object.values(m));ps.forEach(p=>{if(have.has(p))loadPack(p).catch(()=>{})})})}
+const _ttsSpeak=speak;
+speak=function(text,rate=0.85){
+ rate=Number(rate)||0.85;
+ if(!VOICE.on)return _ttsSpeak(text,rate);
+ const k=vKey(text),tok=++VOICE.tok;
+ const tts=()=>{if(tok===VOICE.tok)_ttsSpeak(text,rate)};
+ const play=()=>{
+  if(tok!==VOICE.tok)return;const p=VOICE.map&&VOICE.map[k];if(!p)return tts();
+  loadPack(p).then(pk=>{
+   if(tok!==VOICE.tok)return;const b=pk[k];if(!b)return tts();
+   try{speechSynthesis.cancel()}catch{}
+   const el=voiceEl();try{el.pause()}catch{}
+   const pr=Math.max(.5,Math.min(1.6,rate/0.85));
+   el.src='data:audio/mpeg;base64,'+b;el.defaultPlaybackRate=pr;el.playbackRate=pr;
+   try{el.preservesPitch=true;el.webkitPreservesPitch=true}catch{}
+   const r=el.play();if(r&&r.catch)r.catch(tts);
+   window.__voice=(window.__voice||[]);window.__voice.push(k);
+  },tts)};
+ if(VOICE.map)play();else if(VOICE.done)tts();else{voiceIndex();tts()}};
+voiceIndex();
+/* Danh sách câu cho giọng đọc: giáo viên xuất, rồi tạo âm thanh một lần */
+function voicePhrases(en){const out=[];String(en).replace(/([,;:])\s+/g,'$1\n').split('\n').forEach(part=>{const w=part.split(/\s+/);for(let i=0;i<w.length;i+=4){const g=w.slice(i,i+4);if(g.length===1&&out.length&&i>0)out[out.length-1]+=' '+g[0];else out.push(g.join(' '))}});return out}
+function voiceTexts(){
+ const items=[],seen=new Set(),add=(pack,t)=>{t=String(t||'').trim();if(!t||!vNorm(t))return;const k=vKey(t);if(seen.has(k))return;seen.add(k);items.push({k,pack,t})};
+ (data.ipa||[]).forEach((s,i)=>(s.words||[]).forEach(w=>{add('ipa'+i,w.word);add('ipa'+i,w.sentence)}));
+ (data.translations||[]).forEach((t,i)=>{const P='tr'+i;(t.cards||[]).forEach(c=>[c.eng1,c.eng2].forEach(en=>{if(!en)return;add(P,en);voicePhrases(en).forEach(x=>add(P,x));add(P,String(en).split(/\s+/).slice(0,3).join(' '))}));
+  if(t.fullEng)add(P,t.fullEng);
+  (t.cards||[]).forEach(c=>[c.eng1,c.eng2].forEach(en=>{try{tileTokens(en||'').forEach(w=>add(P,w))}catch{}}))});
+ (units||[]).forEach((u,i)=>(u.words||[]).forEach(w=>add('ds'+i,w.keyword)));
+ (data.taboo||[]).forEach((w,i)=>add('tb'+Math.floor(i/80),w.keyword));
+ try{Object.values(PAIRS).forEach(list=>list.forEach(r=>{add('pairs',r[0]);add('pairs',r[2])}))}catch{}
+ return items}
+function voiceExport(){const items=voiceTexts();downloadJson({app:'bob-english',kind:'voice-texts',made:new Date().toISOString(),count:items.length,items},'bob_voice_texts.json');toast(`Đã xuất ${items.length} câu/từ. Gửi file này để tạo giọng đọc.`)}
+const _rtd10=renderTeacherDashboard;
+renderTeacherDashboard=async function(){await _rtd10();const panel=$('#student-list')?.closest('.panel');if(!panel||$('#voice-export'))return;
+ const box=document.createElement('section');box.className='panel voice-panel';
+ const n=VOICE.count;box.innerHTML=`<h2>Giọng đọc tự nhiên</h2><p class="mt">${n?`Đang dùng giọng đọc tạo sẵn cho <b>${n}</b> câu và từ. Câu nào chưa có sẽ dùng giọng của máy.`:'Chưa có file giọng đọc. Câu và từ đang dùng giọng của máy.'}</p><p class="mt">Khi thêm hoặc sửa nội dung bài, bấm nút dưới để xuất danh sách câu, rồi tạo lại giọng đọc.</p><button class="btn ghost" id="voice-export" type="button">Xuất danh sách câu cho giọng đọc</button>`;
+ panel.after(box);$('#voice-export').onclick=voiceExport};
+/* ===== hết FIX10 ===== */
+
 
 
 ipaQuiz=function(){
