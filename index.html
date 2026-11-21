@@ -1914,12 +1914,12 @@ const VOICE_SILENT='data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwL
 function vNorm(t){return String(t||'').toLowerCase().replace(/[‘’]/g,"'").replace(/[^a-z0-9' ]+/g,' ').replace(/\s+/g,' ').trim()}
 function vKey(t){const s=vNorm(t);let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0}return ('0000000'+h.toString(16)).slice(-8)}
 function voiceIndex(){
- if(!VOICE.ready)VOICE.ready=fetch(VOICE.base+'index.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(j=>{
+ if(!VOICE.ready)VOICE.ready=(async()=>{for(const [ix,pb] of [['audio/index.json','audio/p/'],['index.json','']]){try{const r=await fetch(ix,{cache:'no-cache'});if(!r.ok)continue;const j=await r.json();if(j&&j.packs){VOICE.pb=pb;return j}}catch{}}return null})().then(j=>{
   if(!j||!j.packs)return null;const m={};Object.entries(j.packs).forEach(([p,keys])=>keys.forEach(k=>m[k]=p));VOICE.map=m;VOICE.count=Object.keys(m).length;return m}).catch(()=>null).then(m=>{VOICE.done=true;return m});
  return VOICE.ready}
 function loadPack(p){
  if(VOICE.packs[p])return Promise.resolve(VOICE.packs[p]);
- if(!VOICE.loading[p])VOICE.loading[p]=fetch(VOICE.base+'p/'+p+'.json').then(r=>{if(!r.ok)throw Error('pack');return r.json()}).then(j=>VOICE.packs[p]=j).catch(e=>{delete VOICE.loading[p];throw e});
+ if(!VOICE.loading[p])VOICE.loading[p]=fetch((VOICE.pb??'audio/p/')+p+'.json').then(r=>{if(!r.ok)throw Error('pack');return r.json()}).then(j=>VOICE.packs[p]=j).catch(e=>{delete VOICE.loading[p];throw e});
  return VOICE.loading[p]}
 function voiceEl(){if(!VOICE.el){VOICE.el=new Audio();VOICE.el.preload='auto';VOICE.el.setAttribute('playsinline','')}return VOICE.el}
 function voiceStop(){VOICE.tok++;try{VOICE.el&&VOICE.el.pause()}catch{}}
