@@ -1956,11 +1956,11 @@ voiceIndex();
 function voicePhrases(en){const out=[];String(en).replace(/([,;:])\s+/g,'$1\n').split('\n').forEach(part=>{const w=part.split(/\s+/);for(let i=0;i<w.length;i+=4){const g=w.slice(i,i+4);if(g.length===1&&out.length&&i>0)out[out.length-1]+=' '+g[0];else out.push(g.join(' '))}});return out}
 function voiceTexts(){
  const items=[],seen=new Set(),add=(pack,t)=>{t=String(t||'').trim();if(!t||!vNorm(t))return;const k=vKey(t);if(seen.has(k))return;seen.add(k);items.push({k,pack,t})};
- (data.ipa||[]).forEach((s,i)=>(s.words||[]).forEach(w=>{add('ipa'+i,w.word);add('ipa'+i,w.sentence)}));
+ (data.ipa||[]).forEach((s,i)=>(s.words||[]).forEach(w=>{add('ipa'+i,w.word);add('ipa'+i,w.sentence);try{tileTokens(w.sentence||'').forEach(x=>add('ipa'+i,x))}catch{}}));
  (data.translations||[]).forEach((t,i)=>{const P='tr'+i;(t.cards||[]).forEach(c=>[c.eng1,c.eng2].forEach(en=>{if(!en)return;add(P,en);voicePhrases(en).forEach(x=>add(P,x));add(P,String(en).split(/\s+/).slice(0,3).join(' '))}));
   if(t.fullEng)add(P,t.fullEng);
   (t.cards||[]).forEach(c=>[c.eng1,c.eng2].forEach(en=>{try{tileTokens(en||'').forEach(w=>add(P,w))}catch{}}))});
- (units||[]).forEach((u,i)=>(u.words||[]).forEach(w=>add('ds'+i,w.keyword)));
+ (units||[]).forEach((u,i)=>(u.words||[]).forEach(w=>{add('ds'+i,w.keyword);(w.taboo||[]).forEach(x=>add('ds'+i,x))}));
  (data.taboo||[]).forEach((w,i)=>add('tb'+Math.floor(i/80),w.keyword));
  try{Object.values(PAIRS).forEach(list=>list.forEach(r=>{add('pairs',r[0]);add('pairs',r[2])}))}catch{}
  return items}
